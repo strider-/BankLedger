@@ -28,6 +28,7 @@ namespace BankLedger.ViewModels
         {
             Title = "Home";
             LoadAccountsCommand = new Command(async () => await LoadData(LoadAccountsAsync));
+            Items.CollectionChanged += (s, e) => IsEmpty = !Items.Any();
         }
 
         private async Task LoadAccountsAsync()
@@ -38,8 +39,6 @@ namespace BankLedger.ViewModels
             {
                 Items.Add(account);
             }
-
-            IsEmpty = !Items.Any();
         }
     }
 }

@@ -29,13 +29,13 @@ namespace BankLedger.ViewModels
             Item = item;
 
             Transactions = new ObservableCollection<Transaction>();
+            Transactions.CollectionChanged += (s, e) => IsEmpty = !Transactions.Any();
             LoadTransactionsCommand = new Command(async () => await LoadData(LoadTransactionsAsync));
             DeleteTransactionCommand = new Command((obj) => ConfirmDeletion(obj));
 
             MessagingCenter.Subscribe<NewTransactionViewModel, ModelAction<Transaction>>(this, Messages.Add, (obj, arg) =>
             {
                 Transactions.Insert(0, arg.Item);
-                TouchIsEmpty();
             });
         }
 
@@ -43,7 +43,6 @@ namespace BankLedger.ViewModels
         {
             await Database.DeleteAsync(transaction);
             Transactions.Remove(transaction);
-            TouchIsEmpty();
             MessagingCenter.Send(this, Messages.Delete, new ModelAction<Transaction>(transaction, ActionType.Delete));
         }
 
@@ -55,7 +54,6 @@ namespace BankLedger.ViewModels
             {
                 Transactions.Add(transaction);
             }
-            TouchIsEmpty();
         }
 
         private void ConfirmDeletion(object obj)
@@ -64,11 +62,6 @@ namespace BankLedger.ViewModels
             {
                 MessagingCenter.Send(this, Messages.Confirmation, transaction);
             }
-        }
-
-        private void TouchIsEmpty()
-        {
-            IsEmpty = !Transactions.Any();
         }
     }
 }

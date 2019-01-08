@@ -30,6 +30,7 @@ namespace BankLedger.ViewModels
             Title = "Recurring Transactions";
             Query = new RecurringTransactionSummaryQuery();
             Summaries = new ObservableCollection<RecurringTransactionSummary>();
+            Summaries.CollectionChanged += (s, e) => IsEmpty = !Summaries.Any();
 
             LoadSummariesCommand = new Command(async () => await LoadData(LoadSummariesAsync));
             DeleteRecurringTransactionCommand = new Command((obj) => ConfirmDeletion(obj));
@@ -45,7 +46,6 @@ namespace BankLedger.ViewModels
             await Database.DeleteAsync(transaction);
             var item = Summaries.Single(s => s.Id == transaction.Id);
             Summaries.Remove(item);
-            TouchIsEmpty();
             MessagingCenter.Send(this, Messages.Delete, new ModelAction<RecurringTransaction>(transaction, ActionType.Delete));
         }
 
@@ -72,13 +72,6 @@ namespace BankLedger.ViewModels
             {
                 Summaries.Add(summary);
             }
-
-            TouchIsEmpty();
-        }
-
-        private void TouchIsEmpty()
-        {
-            IsEmpty = !Summaries.Any();
         }
     }
 }

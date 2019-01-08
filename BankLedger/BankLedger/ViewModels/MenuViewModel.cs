@@ -30,6 +30,7 @@ namespace BankLedger.ViewModels
         {
             Title = "Menu";
             Items = new ObservableCollection<HomeMenuItem>();
+            Items.CollectionChanged += (s, e) => IsEmpty = !Items.Any();
             LoadItemsCommand = new Command(async () => await LoadData(LoadMenuItemsAsync));
             Query = new AccountWithCurrentBalanceQuery();
 
@@ -51,7 +52,6 @@ namespace BankLedger.ViewModels
             }
 
             DetermineRecurringTransactionsItem();
-            TouchIsEmpty();
         }
 
         private void HardRefresh(object sender, EmptyAction arg)
@@ -90,7 +90,6 @@ namespace BankLedger.ViewModels
             }
 
             DetermineRecurringTransactionsItem();
-            TouchIsEmpty();
         }
 
         private void DetermineRecurringTransactionsItem()
@@ -105,8 +104,6 @@ namespace BankLedger.ViewModels
                 });
             }
         }
-
-        private bool TouchIsEmpty() => IsEmpty = !Items.Any();
 
         private bool AtLeastOneAccount() => Items.Any(IsAccountItem);
 
