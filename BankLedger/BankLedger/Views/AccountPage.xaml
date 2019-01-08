@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BankLedger.Converters"
+             x:Class="BankLedger.Views.AccountPage"
+             Title="{Binding Title}"
+             x:Name="AccountTransactionsPage">
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Clicked="OnAddTransactionAsync">
+            <ToolbarItem.Icon>
+                <OnPlatform x:TypeArguments="FileImageSource">
+                    <On Platform="UWP" Value="add.png"/>
+                </OnPlatform>
+            </ToolbarItem.Icon>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:AmountConverter x:Key="AmountConverter" />
+            <x:String x:Key="DateTimeFormat">{0:ddd MMM d, yyyy hh:mm tt}</x:String>
+            <x:String x:Key="Currency">{0:C}</x:String>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        <ListView x:Name="ItemsListView"
+                ItemsSource="{Binding Transactions}"
+                VerticalOptions="FillAndExpand"
+                HasUnevenRows="true"
+                RefreshCommand="{Binding LoadTransactionsCommand}"
+                IsPullToRefreshEnabled="true"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                CachingStrategy="RecycleElement"
+                SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"></RowDefinition>
+                                <RowDefinition Height="20"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                <ColumnDefinition Width="40"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0"
+                                    Text="{Binding Description}" 
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="16" />
+                            <Label Grid.Row="1" Grid.Column="0"
+                                    Text="{Binding Timestamp, StringFormat={StaticResource DateTimeFormat}}"
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemDetailTextStyle}"
+                                    FontSize="13" />
+                            <Label Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                                    Text="{Binding Amount, StringFormat={StaticResource Currency}}"
+                                    TextColor="{Binding Amount, Converter={StaticResource AmountConverter}}"
+                                    LineBreakMode="NoWrap"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="End"
+                                    Style="{DynamicResource ListItemDetailTextStyle}"
+                                    FontSize="13" />
+                            <ImageButton Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" 
+                                    Command="{Binding Path=BindingContext.DeleteTransactionCommand, Source={x:Reference AccountTransactionsPage}}"
+                                    CommandParameter="{Binding .}"
+                                    Source="trash_circle_red.png"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

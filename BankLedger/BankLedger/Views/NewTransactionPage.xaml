@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BankLedger.Converters"
+             x:Class="BankLedger.Views.NewTransactionPage"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:ZeroToEmptyConverter x:Key="ZeroToEmptyConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Cancel" Clicked="DismissAsync">
+            <ToolbarItem.Icon>
+                <OnPlatform x:TypeArguments="FileImageSource">
+                    <On Platform="UWP" Value="cancel.png"/>
+                </OnPlatform>
+            </ToolbarItem.Icon>
+        </ToolbarItem>
+        <ToolbarItem Text="Save" Command="{Binding SaveTransactionCommand}">
+            <ToolbarItem.Icon>
+                <OnPlatform x:TypeArguments="FileImageSource">
+                    <On Platform="UWP" Value="save.png"/>
+                </OnPlatform>
+            </ToolbarItem.Icon>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout Spacing="20" Padding="15">
+            <Label Text="Description" FontSize="Medium" />
+            <Entry Text="{Binding Description}" FontSize="Small" Placeholder="Describe the transaction" />
+            
+            <Label Text="Type" FontSize="Medium" />
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Debit" VerticalTextAlignment="Center" />
+                <Switch IsToggled="{Binding IsCredit}" />
+                <Label Text="Credit" VerticalOptions="Center" />
+            </StackLayout>
+            
+            <Label Text="Amount" FontSize="Medium" />
+            <StackLayout Orientation="Horizontal">
+                    <Label Text="$" BackgroundColor="Transparent" VerticalTextAlignment="Center" />
+                    <Entry Text="{Binding Amount, Converter={StaticResource ZeroToEmptyConverter}}" 
+                           FontSize="Small" Margin="0" Keyboard="Numeric" Placeholder="The credit/debit amount" />
+            </StackLayout>
+            
+            <Label Text="Date/Time" FontSize="Medium" />
+            <StackLayout Orientation="Horizontal">
+                <DatePicker Date="{Binding Date}" Format="MMMM d, yyyy" />
+                <TimePicker Time="{Binding Time}" Format="hh:mm tt" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
