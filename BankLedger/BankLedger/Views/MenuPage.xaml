@@ -16,6 +16,14 @@
 
     <StackLayout VerticalOptions="FillAndExpand">
         <Image Source="blackwatch.png" HeightRequest="100" WidthRequest="100" Margin="0, 10, 0, 0"></Image>
+        <StackLayout IsVisible="{Binding IsEmpty}" 
+                         HorizontalOptions="Center" 
+                         VerticalOptions="FillAndExpand">
+            <Label Text="Click the button below to add accounts!" 
+                       Margin="5, 5, 5, 50"
+                       FontAttributes="Bold" />
+            <Image Source="down_arrow.png" HeightRequest="100" WidthRequest="100" Margin="0, 10, 0, 0"></Image>
+        </StackLayout>
         <ListView x:Name="ListViewMenu"
                     HasUnevenRows="True"
                     ItemsSource="{Binding Items}"

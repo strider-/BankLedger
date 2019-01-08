@@ -16,6 +16,13 @@ namespace BankLedger.ViewModels
 
         public Command DeleteTransactionCommand { get; set; }
 
+        private bool _isEmpty;
+        public bool IsEmpty
+        {
+            get { return _isEmpty; }
+            set { SetProperty(ref _isEmpty, value); }
+        }
+
         public AccountViewModel(Account item = null)
         {
             Title = item?.Name;
@@ -28,6 +35,7 @@ namespace BankLedger.ViewModels
             MessagingCenter.Subscribe<NewTransactionViewModel, ModelAction<Transaction>>(this, Messages.Add, (obj, arg) =>
             {
                 Transactions.Insert(0, arg.Item);
+                TouchIsEmpty();
             });
         }
 
@@ -35,6 +43,7 @@ namespace BankLedger.ViewModels
         {
             await Database.DeleteAsync(transaction);
             Transactions.Remove(transaction);
+            TouchIsEmpty();
             MessagingCenter.Send(this, Messages.Delete, new ModelAction<Transaction>(transaction, ActionType.Delete));
         }
 
@@ -46,6 +55,7 @@ namespace BankLedger.ViewModels
             {
                 Transactions.Add(transaction);
             }
+            TouchIsEmpty();
         }
 
         private void ConfirmDeletion(object obj)
@@ -54,6 +64,11 @@ namespace BankLedger.ViewModels
             {
                 MessagingCenter.Send(this, Messages.Confirmation, transaction);
             }
+        }
+
+        private void TouchIsEmpty()
+        {
+            IsEmpty = !Transactions.Any();
         }
     }
 }

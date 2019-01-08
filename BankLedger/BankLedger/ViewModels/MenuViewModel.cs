@@ -19,6 +19,13 @@ namespace BankLedger.ViewModels
 
         private IDatabaseQuery<IEnumerable<Account>> Query { get; }
 
+        private bool _isEmpty;
+        public bool IsEmpty
+        {
+            get { return _isEmpty; }
+            set { SetProperty(ref _isEmpty, value); }
+        }
+
         public MenuViewModel()
         {
             Title = "Menu";
@@ -34,8 +41,17 @@ namespace BankLedger.ViewModels
 
         private void AddNewMenuItem(object sender, Account account)
         {
-            Items.Insert(Items.Count - 1, account.ToHomeMenuItem());
+            if (ContainsRecurringTransactionsItem())
+            {
+                Items.Insert(Items.Count - 1, account.ToHomeMenuItem());
+            }
+            else
+            {
+                Items.Add(account.ToHomeMenuItem());
+            }
+
             DetermineRecurringTransactionsItem();
+            TouchIsEmpty();
         }
 
         private void HardRefresh(object sender, EmptyAction arg)
@@ -74,11 +90,12 @@ namespace BankLedger.ViewModels
             }
 
             DetermineRecurringTransactionsItem();
+            TouchIsEmpty();
         }
 
         private void DetermineRecurringTransactionsItem()
         {
-            if (AtLeastOneAccount() && !Items.Any(i => i.Id == (int)MenuItemType.RecurringTransactions))
+            if (AtLeastOneAccount() && !ContainsRecurringTransactionsItem())
             {
                 Items.Add(new HomeMenuItem
                 {
@@ -89,8 +106,12 @@ namespace BankLedger.ViewModels
             }
         }
 
+        private bool TouchIsEmpty() => IsEmpty = !Items.Any();
+
         private bool AtLeastOneAccount() => Items.Any(IsAccountItem);
 
         private bool IsAccountItem(HomeMenuItem item) => item.TargetType == typeof(AccountPage);
+
+        private bool ContainsRecurringTransactionsItem() => Items.Any(i => i.Id == (int)MenuItemType.RecurringTransactions);
     }
 }

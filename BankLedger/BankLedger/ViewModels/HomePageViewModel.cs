@@ -2,6 +2,7 @@
 using BankLedger.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -13,7 +14,15 @@ namespace BankLedger.ViewModels
 
         public Command LoadAccountsCommand { get; set; }
 
+        private bool _isEmpty;
+        public bool IsEmpty
+        {
+            get { return _isEmpty; }
+            set { SetProperty(ref _isEmpty, value); }
+        }
+
         private IDatabaseQuery<IEnumerable<Account>> Query { get; } = new AccountWithCurrentBalanceQuery();
+
 
         public HomePageViewModel()
         {
@@ -25,10 +34,12 @@ namespace BankLedger.ViewModels
         {
             Items.Clear();
             var accounts = await Database.ExecuteAsync(Query);
-            foreach(var account in accounts)
+            foreach (var account in accounts)
             {
                 Items.Add(account);
             }
+
+            IsEmpty = !Items.Any();
         }
     }
 }

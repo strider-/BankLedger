@@ -31,7 +31,7 @@ namespace BankLedger.Views
         private async Task GoToNewAccountAsync(NewAccountViewModel vm, Account account)
         {
             await DismissAsync();
-            await RootPage.NavigateToAsync(new AccountPage(new AccountViewModel(account)));
+            await RootPage.NavigateToAsync(new AccountPage(account));
         }
 
         private async void DismissAsync(object sender, EventArgs e) => await DismissAsync();

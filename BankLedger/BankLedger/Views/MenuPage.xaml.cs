@@ -37,8 +37,7 @@ namespace BankLedger.Views
                 ContentPage page;
                 if (item.TargetType == typeof(AccountPage))
                 {
-                    var viewModel = new AccountViewModel((Account)item.Data);
-                    page = (ContentPage)Activator.CreateInstance(item.TargetType, new[] { viewModel });
+                    page = (ContentPage)Activator.CreateInstance(item.TargetType, new[] { (Account)item.Data });
                 }
                 else
                 {

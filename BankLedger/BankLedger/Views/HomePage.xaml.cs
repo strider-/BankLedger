@@ -1,5 +1,6 @@
 ﻿using BankLedger.Models;
 using BankLedger.ViewModels;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -33,11 +34,15 @@ namespace BankLedger.Views
         {
             if (e.SelectedItem is Account account)
             {
-                var viewModel = new AccountViewModel(account);
-                var page = new AccountPage(viewModel);
+                var page = new AccountPage(account);
 
                 await RootPage.NavigateToAsync(page);
             }
+        }
+
+        private async void OnAddAccountAsync(object sender, EventArgs e)
+        {
+            await RootPage.ShowAddAccountModalAsync();
         }
     }
 }

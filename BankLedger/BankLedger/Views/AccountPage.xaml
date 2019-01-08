@@ -25,6 +25,12 @@
     </ContentPage.Resources>
 
     <StackLayout>
+        <Label Text="You haven't entered any transactions yet!" 
+               Margin="10, 50, 10, 0"
+               HorizontalOptions="Center" 
+               VerticalOptions="FillAndExpand"
+               IsVisible="{Binding IsEmpty}"
+               FontAttributes="Italic" />
         <ListView x:Name="ItemsListView"
                 ItemsSource="{Binding Transactions}"
                 VerticalOptions="FillAndExpand"

@@ -11,11 +11,11 @@ namespace BankLedger.Views
     {
         AccountViewModel _viewModel;
 
-        public AccountPage(AccountViewModel viewModel)
+        public AccountPage(Account account)
         {
             InitializeComponent();
 
-            BindingContext = _viewModel = viewModel;
+            BindingContext = _viewModel = new AccountViewModel(account);
 
             MessagingCenter.Subscribe<AccountViewModel, Transaction>(this, Messages.Confirmation, ConfirmDeleteAsync);
         }
