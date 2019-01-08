@@ -1,9 +1,7 @@
 ﻿using BankLedger.Data;
 using BankLedger.Models;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -26,7 +24,7 @@ namespace BankLedger.ViewModels
             Query = new RecurringTransactionSummaryQuery();
             Summaries = new ObservableCollection<RecurringTransactionSummary>();
 
-            LoadSummariesCommand = new Command(async () => await LoadSummariesAsync());
+            LoadSummariesCommand = new Command(async () => await LoadData(LoadSummariesAsync));
             DeleteRecurringTransactionCommand = new Command((obj) => ConfirmDeletion(obj));
 
             MessagingCenter.Subscribe<NewRecurringTransactionViewModel, ModelAction<RecurringTransaction>>(this, Messages.Add, (obj, arg) =>
@@ -60,30 +58,11 @@ namespace BankLedger.ViewModels
 
         private async Task LoadSummariesAsync()
         {
-            if (IsBusy)
+            Summaries.Clear();
+            var summaries = await Database.ExecuteAsync(Query);
+            foreach (var summary in summaries)
             {
-                return;
-            }
-
-            IsBusy = true;
-
-            try
-            {
-                await Task.Delay(100);
-                Summaries.Clear();
-                var summaries = await Database.ExecuteAsync(Query);
-                foreach (var summary in summaries)
-                {
-                    Summaries.Add(summary);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
+                Summaries.Add(summary);
             }
         }
     }

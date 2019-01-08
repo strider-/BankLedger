@@ -3,10 +3,8 @@ using BankLedger.Extensions;
 using BankLedger.Models;
 using BankLedger.Services;
 using BankLedger.Views;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -25,7 +23,7 @@ namespace BankLedger.ViewModels
         {
             Title = "Menu";
             Items = new ObservableCollection<HomeMenuItem>();
-            LoadItemsCommand = new Command(async () => await LoadMenuItemsAsync());
+            LoadItemsCommand = new Command(async () => await LoadData(LoadMenuItemsAsync));
             Query = new AccountWithCurrentBalanceQuery();
 
             MessagingCenter.Subscribe<NewAccountViewModel, Account>(this, Messages.Add, AddNewMenuItem);
@@ -67,38 +65,19 @@ namespace BankLedger.ViewModels
 
         private async Task LoadMenuItemsAsync()
         {
-            if (IsBusy)
+            Items.Clear();
+            var accounts = await Database.ExecuteAsync(Query);
+            foreach (var account in accounts)
             {
-                return;
+                Items.Add(account.ToHomeMenuItem());
             }
 
-            IsBusy = true;
-
-            try
+            Items.Add(new HomeMenuItem
             {
-                await Task.Delay(100);
-                Items.Clear();
-                var accounts = await Database.ExecuteAsync(Query);
-                foreach (var account in accounts)
-                {
-                    Items.Add(account.ToHomeMenuItem());
-                }
-
-                Items.Add(new HomeMenuItem
-                {
-                    Id = (int)MenuItemType.RecurringTransactions,
-                    Title = "Recurring Transactions",
-                    TargetType = typeof(RecurringTransactionsPage)
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+                Id = (int)MenuItemType.RecurringTransactions,
+                Title = "Recurring Transactions",
+                TargetType = typeof(RecurringTransactionsPage)
+            });
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using BankLedger.Models;
-using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -24,7 +22,7 @@ namespace BankLedger.ViewModels
             Item = item;
 
             Transactions = new ObservableCollection<Transaction>();
-            LoadTransactionsCommand = new Command(async () => await LoadTransactionsAsync());
+            LoadTransactionsCommand = new Command(async () => await LoadData(LoadTransactionsAsync));
             DeleteTransactionCommand = new Command((obj) => ConfirmDeletion(obj));
 
             MessagingCenter.Subscribe<NewTransactionViewModel, ModelAction<Transaction>>(this, Messages.Add, (obj, arg) =>
@@ -42,30 +40,11 @@ namespace BankLedger.ViewModels
 
         private async Task LoadTransactionsAsync()
         {
-            if (IsBusy)
+            Transactions.Clear();
+            var accountTransactions = await Database.GetAllAsync<Transaction>(t => t.AccountId == Item.Id);
+            foreach (var transaction in accountTransactions.OrderByDescending(t => t.Timestamp))
             {
-                return;
-            }
-
-            IsBusy = true;
-
-            try
-            {
-                await Task.Delay(100);
-                Transactions.Clear();
-                var accountTransactions = await Database.GetAllAsync<Transaction>(t => t.AccountId == Item.Id);
-                foreach (var transaction in accountTransactions.OrderByDescending(t => t.Timestamp))
-                {
-                    Transactions.Add(transaction);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
+                Transactions.Add(transaction);
             }
         }
 
