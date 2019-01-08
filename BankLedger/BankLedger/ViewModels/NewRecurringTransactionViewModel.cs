@@ -9,13 +9,33 @@ namespace BankLedger.ViewModels
 {
     public class NewRecurringTransactionViewModel : BaseViewModel
     {
-        public Account SelectedAccount { get; set; }
+        private Account _selectedAccount;
+        public Account SelectedAccount
+        {
+            get { return _selectedAccount; }
+            set { SetProperty(ref _selectedAccount, value); }
+        }
 
-        public string Description { get; set; }
+        private string _desc;
+        public string Description
+        {
+            get { return _desc; }
+            set { SetProperty(ref _desc, value); }
+        }
 
-        public double Amount { get; set; }
+        private double _amount;
+        public double Amount
+        {
+            get { return _amount; }
+            set { SetProperty(ref _amount, value); }
+        }
 
-        public DayOfMonth SelectedDay { get; set; }
+        private DayOfMonth _selectedDay;
+        public DayOfMonth SelectedDay
+        {
+            get { return _selectedDay; }
+            set { SetProperty(ref _selectedDay, value); }
+        }
 
         private bool _isCredit = false;
         public bool IsCredit
@@ -41,7 +61,16 @@ namespace BankLedger.ViewModels
             }).ToList();
             SelectedDay = AvailableDays.First();
 
-            SaveRecurringTransactionCommand = new Command(async () => await SaveTransactionAsync());
+            SaveRecurringTransactionCommand = new Command(async () => await SaveTransactionAsync(), canExecute: Valid);
+            PropertyChanged += (s, e) => SaveRecurringTransactionCommand.ChangeCanExecute();
+        }
+
+        private bool Valid()
+        {
+            return SelectedAccount != null &&
+                   !string.IsNullOrWhiteSpace(Description) &&
+                   Amount > 0 &&
+                   SelectedDay != null;
         }
 
         private async Task SaveTransactionAsync()

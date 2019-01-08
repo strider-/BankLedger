@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:BankLedger.Converters"
              x:Class="BankLedger.Views.NewTransactionPage"
+             xmlns:Validators="clr-namespace:BankLedger.Validation"
+             xmlns:Behaviors="clr-namespace:BankLedger.Behaviors"             
              Title="{Binding Title}">
 
     <ContentPage.Resources>
@@ -30,9 +32,21 @@
 
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">
-            <Label Text="Description" FontSize="Medium" />
-            <Entry Text="{Binding Description}" FontSize="Small" Placeholder="Describe the transaction" />
+            <StackLayout.Behaviors>
+                <Behaviors:ValidationGroupBehavior x:Name="Form"/>
+            </StackLayout.Behaviors>
             
+            <Label Text="Description" FontSize="Medium" />
+            <Entry Text="{Binding Description}" FontSize="Small" Placeholder="Describe the transaction">
+                <Entry.Behaviors>
+                    <Behaviors:ValidationBehavior PropertyName="Text" Group="{x:Reference Form}">
+                        <Behaviors:ValidationBehavior.Validators>
+                            <Validators:RequiredValidator />
+                        </Behaviors:ValidationBehavior.Validators>
+                    </Behaviors:ValidationBehavior>
+                </Entry.Behaviors>
+            </Entry>
+
             <Label Text="Type" FontSize="Medium" />
             <StackLayout Orientation="Horizontal">
                 <Label Text="Debit" VerticalTextAlignment="Center" />
@@ -44,7 +58,15 @@
             <StackLayout Orientation="Horizontal">
                     <Label Text="$" BackgroundColor="Transparent" VerticalTextAlignment="Center" />
                     <Entry Text="{Binding Amount, Converter={StaticResource ZeroToEmptyConverter}}" 
-                           FontSize="Small" Margin="0" Keyboard="Numeric" Placeholder="The credit/debit amount" />
+                           FontSize="Small" Margin="0" Keyboard="Numeric" Placeholder="The credit/debit amount">
+                        <Entry.Behaviors>
+                            <Behaviors:ValidationBehavior PropertyName="Text" Group="{x:Reference Form}">
+                                <Behaviors:ValidationBehavior.Validators>
+                                    <Validators:CurrencyValidator />
+                                </Behaviors:ValidationBehavior.Validators>
+                            </Behaviors:ValidationBehavior>
+                        </Entry.Behaviors>
+                    </Entry>                        
             </StackLayout>
             
             <Label Text="Date/Time" FontSize="Medium" />

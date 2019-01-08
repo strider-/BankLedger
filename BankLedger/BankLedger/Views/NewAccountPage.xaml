@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:BankLedger.Converters"
              x:Class="BankLedger.Views.NewAccountPage"
+             xmlns:Validators="clr-namespace:BankLedger.Validation"
+             xmlns:Behaviors="clr-namespace:BankLedger.Behaviors"                
              Title="{Binding Title}">
     
     <ContentPage.Resources>
@@ -30,10 +32,31 @@
 
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">
+            <StackLayout.Behaviors>
+                <Behaviors:ValidationGroupBehavior x:Name="Form"/>
+            </StackLayout.Behaviors>
+            
             <Label Text="Account Name" FontSize="Medium" />
-            <Entry Text="{Binding Name}" FontSize="Small" Placeholder="Friendly account name" />
+            <Entry Text="{Binding Name}" FontSize="Small" Placeholder="Friendly account name">
+                <Entry.Behaviors>
+                    <Behaviors:ValidationBehavior PropertyName="Text" Group="{x:Reference Form}">
+                        <Behaviors:ValidationBehavior.Validators>
+                            <Validators:RequiredValidator />
+                        </Behaviors:ValidationBehavior.Validators>
+                    </Behaviors:ValidationBehavior>
+                </Entry.Behaviors>
+            </Entry>
+            
             <Label Text="Current Balance" FontSize="Medium" />
-            <Entry Text="{Binding InitialBalance, Converter={StaticResource ZeroToEmptyConverter}}" FontSize="Small" Margin="0" Keyboard="Numeric" Placeholder="Amount to start with" />
+            <Entry Text="{Binding InitialBalance, Converter={StaticResource ZeroToEmptyConverter}}" FontSize="Small" Margin="0" Keyboard="Numeric" Placeholder="Amount to start with">
+                <Entry.Behaviors>
+                    <Behaviors:ValidationBehavior PropertyName="Text" Group="{x:Reference Form}">
+                        <Behaviors:ValidationBehavior.Validators>
+                            <Validators:CurrencyValidator />
+                        </Behaviors:ValidationBehavior.Validators>
+                    </Behaviors:ValidationBehavior>
+                </Entry.Behaviors>
+            </Entry>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

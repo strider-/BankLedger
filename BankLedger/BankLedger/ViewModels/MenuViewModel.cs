@@ -35,6 +35,7 @@ namespace BankLedger.ViewModels
         private void AddNewMenuItem(object sender, Account account)
         {
             Items.Insert(Items.Count - 1, account.ToHomeMenuItem());
+            DetermineRecurringTransactionsItem();
         }
 
         private void HardRefresh(object sender, EmptyAction arg)
@@ -72,12 +73,24 @@ namespace BankLedger.ViewModels
                 Items.Add(account.ToHomeMenuItem());
             }
 
-            Items.Add(new HomeMenuItem
-            {
-                Id = (int)MenuItemType.RecurringTransactions,
-                Title = "Recurring Transactions",
-                TargetType = typeof(RecurringTransactionsPage)
-            });
+            DetermineRecurringTransactionsItem();
         }
+
+        private void DetermineRecurringTransactionsItem()
+        {
+            if (AtLeastOneAccount() && !Items.Any(i => i.Id == (int)MenuItemType.RecurringTransactions))
+            {
+                Items.Add(new HomeMenuItem
+                {
+                    Id = (int)MenuItemType.RecurringTransactions,
+                    Title = "Recurring Transactions",
+                    TargetType = typeof(RecurringTransactionsPage)
+                });
+            }
+        }
+
+        private bool AtLeastOneAccount() => Items.Any(IsAccountItem);
+
+        private bool IsAccountItem(HomeMenuItem item) => item.TargetType == typeof(AccountPage);
     }
 }

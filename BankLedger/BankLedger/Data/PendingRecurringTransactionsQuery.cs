@@ -14,7 +14,7 @@ namespace BankLedger.Data
 	                [rt].[AccountId],
 	                [rt].[Description],
 	                [rt].[Amount],
-	                ((STRFTIME('%s', 'now') + 62135596800) * 10000000) AS [Timestamp],
+	                ((STRFTIME('%s', 'now', 'localtime') + 62135596800) * 10000000) AS [Timestamp],
 	                [rt].[Id] AS [RecurringTransactionId],
 	                DATETIME(([t].[Timestamp]/10000000) - 62135596800, 'unixepoch') as [dt]
                 FROM [RecurringTransaction] AS [rt]

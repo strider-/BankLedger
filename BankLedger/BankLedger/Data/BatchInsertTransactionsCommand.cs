@@ -14,11 +14,6 @@ namespace BankLedger.Data
 
         public async Task<int> ExecuteAsync(SQLiteAsyncConnection db)
         {
-            foreach (var item in _transactions)
-            {
-                item.Timestamp = DateTime.Now;
-            }
-
             return await db.InsertAllAsync(_transactions, runInTransaction: true);
         }
     }

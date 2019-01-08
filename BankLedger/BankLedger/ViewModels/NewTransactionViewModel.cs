@@ -7,9 +7,19 @@ namespace BankLedger.ViewModels
 {
     public class NewTransactionViewModel : BaseViewModel
     {
-        public string Description { get; set; }
+        private string _desc;
+        public string Description
+        {
+            get { return _desc; }
+            set { SetProperty(ref _desc, value); }
+        }
 
-        public double Amount { get; set; }
+        private double _amount;
+        public double Amount
+        {
+            get { return _amount; }
+            set { SetProperty(ref _amount, value); }
+        }
 
         public DateTime Date { get; set; }
 
@@ -33,7 +43,13 @@ namespace BankLedger.ViewModels
             Date = DateTime.Now;
             Time = Date.TimeOfDay;
 
-            SaveTransactionCommand = new Command(async () => await SaveTransactionAsync());
+            SaveTransactionCommand = new Command(async () => await SaveTransactionAsync(), canExecute: Valid);
+            PropertyChanged += (s, e) => SaveTransactionCommand.ChangeCanExecute();
+        }
+
+        private bool Valid()
+        {
+            return !string.IsNullOrWhiteSpace(Description) && Amount > 0 && AccountId != 0;
         }
 
         private async Task SaveTransactionAsync()
