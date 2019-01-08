@@ -9,8 +9,6 @@
         <ResourceDictionary>
             <local:AmountConverter x:Key="AmountConverter" />
             <x:String x:Key="Currency">{0:C}</x:String>
-            <Color x:Key="TextColor">White</Color>
-            <Color x:Key="PrimaryColor">#741B47</Color>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -19,7 +17,7 @@
         <StackLayout IsVisible="{Binding IsEmpty}" 
                          HorizontalOptions="Center" 
                          VerticalOptions="FillAndExpand">
-            <Label Text="Click the button below to add accounts!" 
+            <Label Text="Click the button at the bottom to add accounts!"
                        Margin="5, 5, 5, 50"
                        FontAttributes="Bold" />
             <Image Source="down_arrow.png" HeightRequest="100" WidthRequest="100" Margin="0, 10, 0, 0"></Image>
@@ -54,8 +52,7 @@
         <Button 
             Text="+ Add Account"
             Clicked="OnAddAccountAsync"
-            TextColor="{StaticResource TextColor}"
-            BackgroundColor="{StaticResource PrimaryColor}"
+            Style="{StaticResource Button}"
             VerticalOptions="End" />
     </StackLayout>
 </ContentPage>

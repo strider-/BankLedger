@@ -21,6 +21,7 @@
                        Margin="10, 50, 10, 30"
                        FontAttributes="Italic" />
                 <Button Clicked="OnAddAccountAsync"
+                        Style="{StaticResource Button}"
                         Text="+ Add Account"
                         Margin="10, 0, 10, 0" />
             </StackLayout>
