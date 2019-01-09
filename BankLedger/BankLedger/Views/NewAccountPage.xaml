@@ -1,17 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:BankLedger.Converters"
-             x:Class="BankLedger.Views.NewAccountPage"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
              xmlns:Validators="clr-namespace:BankLedger.Validation"
-             xmlns:Behaviors="clr-namespace:BankLedger.Behaviors"                
+             xmlns:Behaviors="clr-namespace:BankLedger.Behaviors"  
+             x:Class="BankLedger.Views.NewAccountPage"
              Title="{Binding Title}">
-    
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:ZeroToEmptyConverter x:Key="ZeroToEmptyConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
     
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Cancel" Clicked="DismissAsync">

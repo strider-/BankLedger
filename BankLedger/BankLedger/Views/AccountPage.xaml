@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:BankLedger.Converters"
              x:Class="BankLedger.Views.AccountPage"
              Title="{Binding Title}"
              x:Name="AccountTransactionsPage">
-    
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Clicked="OnAddTransactionAsync">
             <ToolbarItem.Icon>
@@ -15,15 +14,7 @@
             </ToolbarItem.Icon>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:AmountConverter x:Key="AmountConverter" />
-            <x:String x:Key="DateTimeFormat">{0:ddd MMM d, yyyy hh:mm tt}</x:String>
-            <x:String x:Key="Currency">{0:C}</x:String>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
+    
     <StackLayout>
         <Label Text="You haven't entered any transactions yet!" 
                Margin="10, 50, 10, 0"

@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:BankLedger.Converters"
+             x:Name="RecurringTransactionsSummary"
              x:Class="BankLedger.Views.RecurringTransactionsPage"
-             Title="{Binding Title}"
-             x:Name="RecurringTransactionsSummary">
+             Title="{Binding Title}">
     
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Clicked="OnAddRecurringTransactionAsync">
@@ -15,13 +14,6 @@
             </ToolbarItem.Icon>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:AmountConverter x:Key="AmountConverter" />
-            <x:String x:Key="Currency">{0:C}</x:String>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
     <StackLayout>
         <Label Text="You haven't entered any recurring transactions yet!" 

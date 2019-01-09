@@ -1,16 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:BankLedger.Converters"
              x:Class="BankLedger.Views.HomePage"
              Title="{Binding Title}">
-    
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:AmountConverter x:Key="AmountConverter" />
-            <x:String x:Key="Currency">{0:C}</x:String>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     
     <ContentPage.Content>
         <StackLayout>
