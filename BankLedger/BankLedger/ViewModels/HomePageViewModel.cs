@@ -26,7 +26,7 @@ namespace BankLedger.ViewModels
 
         public HomePageViewModel()
         {
-            Title = "Home";
+            Title = "Bank Ledger";
             LoadAccountsCommand = new Command(async () => await LoadData(LoadAccountsAsync));
             Items.CollectionChanged += (s, e) => IsEmpty = !Items.Any();
         }
