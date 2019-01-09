@@ -13,7 +13,7 @@
     </ContentPage.Resources>
 
     <StackLayout VerticalOptions="FillAndExpand">
-        <Image Source="blackwatch.png" HeightRequest="100" WidthRequest="100" Margin="0, 10, 0, 0"></Image>
+        <Image Source="notebook.png" HeightRequest="100" WidthRequest="100" Margin="0, 10, 0, 0"></Image>
         <StackLayout IsVisible="{Binding IsEmpty}" 
                          HorizontalOptions="Center" 
                          VerticalOptions="FillAndExpand">

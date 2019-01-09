@@ -4,7 +4,8 @@
     <color android:color="@color/splash_background"/>
   </item>
   <item     
-    android:gravity="center">
+    android:gravity="center"
+    android:bottom="170dp">
     <bitmap
         android:src="@drawable/brand_logo"
         android:tileMode="disabled" />
