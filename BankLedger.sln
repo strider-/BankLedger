@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankLedger.Android", "BankLedger.Android\BankLedger.Android.csproj", "{24CE3C36-16B9-426D-AA0C-5961ECF8D88C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankLedger.Core", "BankLedger\BankLedger.Core.csproj", "{28B13EFF-BCDB-4C0D-B560-7118C8AD36FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankLedger.Core", "BankLedger.Core\BankLedger.Core.csproj", "{28B13EFF-BCDB-4C0D-B560-7118C8AD36FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
