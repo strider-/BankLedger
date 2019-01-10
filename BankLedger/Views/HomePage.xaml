@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BankLedger.Core.Views.HomePage"
+             Title="{Binding Title}">
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout IsVisible="{Binding IsEmpty}" 
+                         HorizontalOptions="Center" 
+                         VerticalOptions="FillAndExpand">
+                <Label Text="Looks like you haven't added any accounts!" 
+                       Margin="10, 50, 10, 30"
+                       FontAttributes="Italic" />
+                <Button Clicked="OnAddAccountAsync"
+                        Style="{StaticResource Button}"
+                        Text="+ Add Account"
+                        Margin="10, 0, 10, 0" />
+            </StackLayout>
+            <ListView ItemsSource="{Binding Items}"
+                          HasUnevenRows="True" 
+                          IsPullToRefreshEnabled="true"
+                          IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                          RefreshCommand="{Binding LoadAccountsCommand}"
+                          ItemSelected="OnAccountSelectedAsync"
+                          CachingStrategy="RecycleElement"
+                          SelectionMode="Single"
+                          SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame Padding="5">
+                                <Frame.Content>
+                                    <Frame Padding="10" 
+                                               OutlineColor="Gray" 
+                                               BackgroundColor="White">
+                                        <Frame.Content>
+                                            <StackLayout Padding="10,0,0,0" Orientation="Vertical">
+                                                <Label Text="{Binding Name}"
+                                                           FontFamily="OpenSans"
+                                                           FontAttributes="Bold"
+                                                           FontSize="20"
+                                                           TextColor="Black" />
+
+                                                <Label Text="{Binding CurrentBalance, StringFormat={StaticResource Currency}}"
+                                                           FontFamily="OpenSans-Light"
+                                                           FontSize="16"
+                                                           TextColor="{Binding CurrentBalance, Converter={StaticResource AmountConverter}}"/>
+                                            </StackLayout>
+                                        </Frame.Content>
+                                    </Frame>
+                                </Frame.Content>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BankLedger.Core.Converters"
+             x:Class="BankLedger.Core.App">
+    
+    <Application.Resources>
+        <ResourceDictionary>
+            <!--Global Styles-->
+            <Color x:Key="NavigationPrimary">#741B47</Color>
+            <Color x:Key="LightTextColor">White</Color>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
+                <Setter Property="BarTextColor" Value="{StaticResource LightTextColor}" />
+            </Style>
+            <Style x:Key="Button" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource NavigationPrimary}" />
+                <Setter Property="TextColor" Value="{StaticResource LightTextColor}" />
+            </Style>
+            
+            <!--String Formats-->
+            <x:String x:Key="Currency">{0:C}</x:String>
+            <x:String x:Key="DateTimeFormat">{0:ddd MMM d, yyyy hh:mm tt}</x:String>
+            
+            <!--Converters-->
+            <local:ZeroToEmptyConverter x:Key="ZeroToEmptyConverter" />
+            <local:AmountConverter x:Key="AmountConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
