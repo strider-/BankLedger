@@ -22,7 +22,7 @@ namespace BankLedger.Core.Models
 
         public Type TargetType { get; set; }
 
-        public bool HasBalance { get; set; }
+        public bool IsForAccount => Data != null && Data is Account;
 
         public object Data { get; set; }
     }

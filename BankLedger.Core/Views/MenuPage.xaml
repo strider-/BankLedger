@@ -41,7 +41,7 @@
                             <Label Text="{Binding Balance, StringFormat={StaticResource Currency}}"
                                    Grid.Row="0" Grid.Column="1"
                                    HorizontalOptions="End"
-                                   IsVisible="{Binding HasBalance}"
+                                   IsVisible="{Binding IsForAccount}"
                                    TextColor="{Binding Balance, Converter={StaticResource AmountConverter}}" />
                         </Grid>
                     </ViewCell>
