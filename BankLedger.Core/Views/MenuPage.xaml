@@ -38,10 +38,11 @@
                             <Label Text="{Binding Title}" 
                                    Grid.Row="0" Grid.Column="0"
                                    FontSize="20" />
-                            <Label Text="{Binding Subtitle}"
+                            <Label Text="{Binding Balance, StringFormat={StaticResource Currency}}"
                                    Grid.Row="0" Grid.Column="1"
                                    HorizontalOptions="End"
-                                   TextColor="{Binding Data.CurrentBalance, Converter={StaticResource AmountConverter}}" />
+                                   IsVisible="{Binding HasBalance}"
+                                   TextColor="{Binding Balance, Converter={StaticResource AmountConverter}}" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

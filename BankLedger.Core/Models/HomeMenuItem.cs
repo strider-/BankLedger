@@ -13,14 +13,16 @@ namespace BankLedger.Core.Models
 
         public string Title { get; set; }
 
-        private string _subtitle;
-        public string Subtitle
+        private double _balance;
+        public double Balance
         {
-            get { return _subtitle; }
-            set { SetProperty(ref _subtitle, value); }
+            get { return _balance; }
+            set { SetProperty(ref _balance, value); }
         }
 
         public Type TargetType { get; set; }
+
+        public bool HasBalance { get; set; }
 
         public object Data { get; set; }
     }

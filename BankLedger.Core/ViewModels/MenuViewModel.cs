@@ -74,7 +74,7 @@ namespace BankLedger.Core.ViewModels
                         account.CurrentBalance -= obj.Item.Amount;
                         break;
                 }
-                menuItem.Subtitle = account.CurrentBalance.ToString("C");
+                menuItem.Balance = account.CurrentBalance;
             }
         }
 

@@ -16,7 +16,10 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout>
-        <StackLayout Orientation="Horizontal" VerticalOptions="Start" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource StickyColor}">
+        <StackLayout Orientation="Horizontal" 
+                     VerticalOptions="Start" 
+                     HorizontalOptions="FillAndExpand" 
+                     BackgroundColor="{StaticResource StickyColor}">
             <Label 
                 Margin="10,10,0,10"
                 Text="Current Balance" 

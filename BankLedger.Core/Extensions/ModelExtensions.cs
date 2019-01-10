@@ -14,7 +14,8 @@ namespace BankLedger.Core.Extensions
                 Id = account.Id,
                 TargetType = typeof(AccountPage),
                 Title = account.Name,
-                Subtitle = account.CurrentBalance.ToString("C")
+                Balance = account.CurrentBalance,
+                HasBalance = true
             };
         }
 
