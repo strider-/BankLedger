@@ -32,7 +32,7 @@
                         <Grid Padding="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="70"></ColumnDefinition>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             
                             <Label Text="{Binding Title}" 
