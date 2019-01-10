@@ -1,6 +1,7 @@
 ﻿using BankLedger.Models;
 using BankLedger.ViewModels;
 using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -34,19 +35,23 @@ namespace BankLedger.Views
         {
             if (e.SelectedItem is HomeMenuItem item && item.TargetType != null)
             {
-                ContentPage page;
-                if (item.TargetType == typeof(AccountPage))
-                {
-                    page = (ContentPage)Activator.CreateInstance(item.TargetType, new[] { (Account)item.Data });
-                }
-                else
-                {
-                    page = (ContentPage)Activator.CreateInstance(item.TargetType);
-                }
+                var page = CreatePageFromMenuItem(item);
 
                 await RootPage.NavigateToAsync(page);
                 ListViewMenu.SelectedItem = null;
             }
+        }
+
+        private ContentPage CreatePageFromMenuItem(HomeMenuItem item)
+        {
+            List<object> args = new List<object>();
+
+            if (item.TargetType == typeof(AccountPage))
+            {
+                args.Add((Account)item.Data);
+            }
+
+            return (ContentPage)Activator.CreateInstance(item.TargetType, args.ToArray());
         }
 
         private async void OnAddAccountAsync(object sender, EventArgs e)

@@ -27,7 +27,7 @@ namespace BankLedger.Validation
             layout.Children.Insert(viewIndex + 1, new Label
             {
                 Text = message,
-                FontSize = 10,
+                FontSize = 16,
                 StyleId = view.Id.ToString(),
                 TextColor = Color.Red,
                 VerticalTextAlignment = TextAlignment.Center

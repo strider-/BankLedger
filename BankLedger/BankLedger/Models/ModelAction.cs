@@ -4,7 +4,7 @@
     {
         Add,
         Delete,
-        NA
+        None
     };
 
     public class ModelAction<T>
@@ -22,6 +22,6 @@
 
     public class EmptyAction : ModelAction<int>
     {
-        public EmptyAction() : base(0, ActionType.NA) { }
+        public EmptyAction() : base(0, ActionType.None) { }
     }
 }

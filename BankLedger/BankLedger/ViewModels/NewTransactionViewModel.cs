@@ -49,7 +49,9 @@ namespace BankLedger.ViewModels
 
         private bool Valid()
         {
-            return !string.IsNullOrWhiteSpace(Description) && Amount > 0 && AccountId != 0;
+            return !string.IsNullOrWhiteSpace(Description) && 
+                Amount > 0 && 
+                AccountId != 0;
         }
 
         private async Task SaveTransactionAsync()
@@ -59,7 +61,7 @@ namespace BankLedger.ViewModels
                 AccountId = AccountId,
                 Amount = Amount * (IsCredit ? 1 : -1),
                 Description = Description,
-                Timestamp = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, Time.Seconds)
+                Timestamp = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, Time.Seconds, DateTimeKind.Local)
             };
 
             await Database.SaveAsync(item);

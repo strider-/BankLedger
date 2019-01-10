@@ -3,6 +3,7 @@ using Android.App.Job;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using System;
 
 namespace BankLedger.Droid
 {
@@ -29,8 +30,10 @@ namespace BankLedger.Droid
             var javaClass = Java.Lang.Class.FromType(typeof(RecurringTransactionsJob));
             var componentName = new ComponentName(this, javaClass);
 
+            var interval = (long)TimeSpan.FromDays(1).TotalMilliseconds;
+
             JobInfo.Builder builder = new JobInfo.Builder(0x42069, componentName)
-                .SetPeriodic(24 * 60 * 60 * 1000L); // once a day
+                .SetPeriodic(interval); // once a day
 
             _jobScheduler.Schedule(builder.Build());
         }
