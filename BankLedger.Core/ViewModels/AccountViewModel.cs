@@ -1,5 +1,7 @@
 ﻿using BankLedger.Core.Models;
+using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -23,13 +25,21 @@ namespace BankLedger.Core.ViewModels
             set { SetProperty(ref _isEmpty, value); }
         }
 
+        private double _balance;
+        public double CurrentBalance
+        {
+            get { return _balance; }
+            set { SetProperty(ref _balance, value); }
+        }
+
         public AccountViewModel(Account item = null)
         {
-            Title = item?.Name;
             Item = item;
+            Title = item.Name;
+            CurrentBalance = item.CurrentBalance;
 
             Transactions = new ObservableCollection<Transaction>();
-            Transactions.CollectionChanged += (s, e) => IsEmpty = !Transactions.Any();
+            Transactions.CollectionChanged += Refresh;
             LoadTransactionsCommand = new Command(async () => await LoadData(LoadTransactionsAsync));
             DeleteTransactionCommand = new Command((obj) => ConfirmDeletion(obj));
 
@@ -54,6 +64,12 @@ namespace BankLedger.Core.ViewModels
             {
                 Transactions.Add(transaction);
             }
+        }
+
+        private void Refresh(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            IsEmpty = !Transactions.Any();
+            CurrentBalance = Transactions.Aggregate(Item.InitialBalance, (b, t) => b += t.Amount);
         }
 
         private void ConfirmDeletion(object obj)

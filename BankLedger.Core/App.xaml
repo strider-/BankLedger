@@ -8,7 +8,8 @@
         <ResourceDictionary>
             <!--Global Styles-->
             <Color x:Key="NavigationPrimary">#741B47</Color>
-            <Color x:Key="LightTextColor">White</Color>
+            <Color x:Key="LightTextColor">#FFFFFF</Color>
+            <Color x:Key="StickyColor">#EEEEEE</Color>
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
                 <Setter Property="BarTextColor" Value="{StaticResource LightTextColor}" />
