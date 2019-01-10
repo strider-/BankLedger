@@ -33,7 +33,7 @@ namespace BankLedger.Core.Views
 
         private async void OnItemSelectedAsync(object sender, SelectedItemChangedEventArgs e)
         {
-            if (e.SelectedItem is HomeMenuItem item && item.TargetType != null)
+            if (e.SelectedItem is HomeMenuItem item && item.TargetPageType != null)
             {
                 var page = CreatePageFromMenuItem(item);
 
@@ -46,12 +46,12 @@ namespace BankLedger.Core.Views
         {
             List<object> args = new List<object>();
 
-            if (item.TargetType == typeof(AccountPage))
+            if (item.TargetPageType == typeof(AccountPage))
             {
                 args.Add((Account)item.Data);
             }
 
-            return (ContentPage)Activator.CreateInstance(item.TargetType, args.ToArray());
+            return (ContentPage)Activator.CreateInstance(item.TargetPageType, args.ToArray());
         }
 
         private async void OnAddAccountAsync(object sender, EventArgs e)

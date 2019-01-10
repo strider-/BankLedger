@@ -20,7 +20,7 @@ namespace BankLedger.Core.Models
             set { SetProperty(ref _balance, value); }
         }
 
-        public Type TargetType { get; set; }
+        public Type TargetPageType { get; set; }
 
         public bool IsForAccount => Data != null && Data is Account;
 

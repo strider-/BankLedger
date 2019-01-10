@@ -1,23 +1,9 @@
-﻿using BankLedger.Core.Models;
-using BankLedger.Core.Views;
-using System;
+﻿using System;
 
 namespace BankLedger.Core.Extensions
 {
     public static class ModelExtensions
     {
-        public static HomeMenuItem ToHomeMenuItem(this Account account)
-        {
-            return new HomeMenuItem
-            {
-                Data = account,
-                Id = account.Id,
-                TargetType = typeof(AccountPage),
-                Title = account.Name,
-                Balance = account.CurrentBalance
-            };
-        }
-
         public static string Place(this int i)
         {
             string suffix = string.Empty;

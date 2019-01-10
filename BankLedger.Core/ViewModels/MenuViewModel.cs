@@ -1,5 +1,4 @@
 ﻿using BankLedger.Core.Data;
-using BankLedger.Core.Extensions;
 using BankLedger.Core.Models;
 using BankLedger.Core.Services;
 using BankLedger.Core.Views;
@@ -42,13 +41,15 @@ namespace BankLedger.Core.ViewModels
 
         private void AddNewMenuItem(object sender, Account account)
         {
+            var menuItem = ToHomeMenuItem(account);
+
             if (ContainsRecurringTransactionsItem())
             {
-                Items.Insert(Items.Count - 1, account.ToHomeMenuItem());
+                Items.Insert(Items.Count - 1, menuItem);
             }
             else
             {
-                Items.Add(account.ToHomeMenuItem());
+                Items.Add(menuItem);
             }
 
             DetermineRecurringTransactionsItem();
@@ -84,7 +85,8 @@ namespace BankLedger.Core.ViewModels
             var accounts = await Database.ExecuteAsync(Query);
             foreach (var account in accounts)
             {
-                Items.Add(account.ToHomeMenuItem());
+                var menuItem = ToHomeMenuItem(account);
+                Items.Add(menuItem);
             }
 
             DetermineRecurringTransactionsItem();
@@ -98,14 +100,26 @@ namespace BankLedger.Core.ViewModels
                 {
                     Id = (int)MenuItemType.RecurringTransactions,
                     Title = "Recurring Transactions",
-                    TargetType = typeof(RecurringTransactionsPage)
+                    TargetPageType = typeof(RecurringTransactionsPage)
                 });
             }
         }
 
+        private HomeMenuItem ToHomeMenuItem(Account account)
+        {
+            return new HomeMenuItem
+            {
+                Data = account,
+                Id = account.Id,
+                TargetPageType = typeof(AccountPage),
+                Title = account.Name,
+                Balance = account.CurrentBalance
+            };
+        }
+
         private bool AtLeastOneAccount() => Items.Any(IsAccountItem);
 
-        private bool IsAccountItem(HomeMenuItem item) => item.TargetType == typeof(AccountPage);
+        private bool IsAccountItem(HomeMenuItem item) => item.TargetPageType == typeof(AccountPage);
 
         private bool ContainsRecurringTransactionsItem() => Items.Any(i => i.Id == (int)MenuItemType.RecurringTransactions);
     }
