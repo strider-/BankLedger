@@ -61,10 +61,9 @@ namespace BankLedger.Core.ViewModels
 
         private void Refresh(object sender, ModelAction<Transaction> obj)
         {
-            var menuItem = Items.FirstOrDefault(i => i.Id == obj.Item.AccountId);
+            var menuItem = Items.SingleOrDefault(i => i.Id == obj.Item.AccountId);
             if (menuItem != null)
             {
-                var index = Items.IndexOf(menuItem);
                 var account = menuItem.Data as Account;
                 switch (obj.Action)
                 {
@@ -75,8 +74,7 @@ namespace BankLedger.Core.ViewModels
                         account.CurrentBalance -= obj.Item.Amount;
                         break;
                 }
-                Items.RemoveAt(index);
-                Items.Insert(index, menuItem);
+                menuItem.Subtitle = account.CurrentBalance.ToString("C");
             }
         }
 

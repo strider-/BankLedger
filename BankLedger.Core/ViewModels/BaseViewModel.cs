@@ -1,14 +1,12 @@
-﻿using BankLedger.Core.Services;
+﻿using BankLedger.Core.Models;
+using BankLedger.Core.Services;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace BankLedger.Core.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : NotifyPropertyChanged
     {
         public IDatabase Database => App.Database;
 
@@ -24,19 +22,6 @@ namespace BankLedger.Core.ViewModels
         {
             get { return title; }
             set { SetProperty(ref title, value); }
-        }
-
-        protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName]string propertyName = "",
-            Action onChanged = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
-
-            backingStore = value;
-            onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
-            return true;
         }
 
         protected async Task LoadData(Func<Task> task)
@@ -62,17 +47,5 @@ namespace BankLedger.Core.ViewModels
                 IsBusy = false;
             }
         }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
-
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

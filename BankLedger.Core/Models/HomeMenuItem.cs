@@ -7,11 +7,18 @@ namespace BankLedger.Core.Models
         RecurringTransactions = 1000
     }
 
-    public class HomeMenuItem
+    public class HomeMenuItem : NotifyPropertyChanged
     {
         public int Id { get; set; }
 
         public string Title { get; set; }
+
+        private string _subtitle;
+        public string Subtitle
+        {
+            get { return _subtitle; }
+            set { SetProperty(ref _subtitle, value); }
+        }
 
         public Type TargetType { get; set; }
 

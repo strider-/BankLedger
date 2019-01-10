@@ -38,7 +38,7 @@
                             <Label Text="{Binding Title}" 
                                    Grid.Row="0" Grid.Column="0"
                                    FontSize="20" />
-                            <Label Text="{Binding Data.CurrentBalance, StringFormat={StaticResource Currency}}" 
+                            <Label Text="{Binding Subtitle}" 
                                    Grid.Row="0" Grid.Column="1"
                                    HorizontalOptions="End"
                                    TextColor="{Binding Data.CurrentBalance, Converter={StaticResource AmountConverter}}" />

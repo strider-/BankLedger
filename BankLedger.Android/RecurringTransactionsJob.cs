@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.App.Job;
+using Android.Content;
 using Android.OS;
 using BankLedger.Core;
 using BankLedger.Core.Data;
@@ -14,8 +15,18 @@ namespace BankLedger.Droid
     [Service(Name = "BankLedger.Android.RecurringTransactionsJob", Permission = "android.permission.BIND_JOB_SERVICE")]
     public class RecurringTransactionsJob : JobService
     {
+        public const int JobId = 0x42069;
+
         private WorkTask _task;
         private JobParameters _parameters;
+
+        public static JobInfo.Builder Builder(Context context)
+        {
+            var javaClass = Class.FromType(typeof(RecurringTransactionsJob));
+            var componentName = new ComponentName(context, javaClass);
+
+            return new JobInfo.Builder(JobId, componentName);
+        }
 
         public override bool OnStartJob(JobParameters @params)
         {

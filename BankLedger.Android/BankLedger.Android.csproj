@@ -98,7 +98,7 @@
     <Folder Include="Resources\drawable-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BankLedger\BankLedger.Core.csproj">
+    <ProjectReference Include="..\BankLedger.Core\BankLedger.Core.csproj">
       <Project>{28B13EFF-BCDB-4C0D-B560-7118C8AD36FA}</Project>
       <Name>BankLedger.Core</Name>
     </ProjectReference>

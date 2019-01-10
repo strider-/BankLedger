@@ -28,7 +28,9 @@ namespace BankLedger.Core.Services
 
         public async Task<IEnumerable<T>> GetAllAsync<T>(Expression<Func<T, bool>> predicate = null) where T : Root, new()
         {
-            return await _db.Table<T>().Where(predicate ?? (_ => true)).ToListAsync().ConfigureAwait(false);
+            predicate = predicate ?? (_ => true);
+
+            return await _db.Table<T>().Where(predicate).ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<int> SaveAsync<T>(T item) where T : Root, new()
