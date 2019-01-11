@@ -118,9 +118,7 @@ namespace BankLedger.Core.ViewModels
             };
         }
 
-        private bool AtLeastOneAccount() => Items.Any(IsAccountItem);
-
-        private bool IsAccountItem(HomeMenuItem item) => item is AccountMenuItem;
+        private bool AtLeastOneAccount() => Items.Any(i => i is AccountMenuItem);
 
         private bool ContainsRecurringTransactionsItem() => Items.Any(i => i.Id == (int)MenuItemType.RecurringTransactions);
     }

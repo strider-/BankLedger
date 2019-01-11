@@ -1,4 +1,5 @@
 ﻿using System;
+using Xamarin.Forms;
 
 namespace BankLedger.Core.Models
 {
@@ -14,6 +15,13 @@ namespace BankLedger.Core.Models
         public string Title { get; set; }
 
         public Type TargetPageType { get; set; }
+
+        public virtual ContentPage CreateContentPage() => CreatePageInstance();
+
+        protected ContentPage CreatePageInstance(params object[] args)
+        {
+            return (ContentPage)Activator.CreateInstance(TargetPageType, args);
+        }
     }
 
     public class AccountMenuItem : HomeMenuItem
@@ -26,5 +34,7 @@ namespace BankLedger.Core.Models
         }
 
         public Account Account { get; set; }
+
+        public override ContentPage CreateContentPage() => CreatePageInstance(Account);
     }
 }
