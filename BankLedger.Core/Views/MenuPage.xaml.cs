@@ -10,9 +10,9 @@ namespace BankLedger.Core.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MenuPage : ContentPage
     {
-        MainPage RootPage { get => Application.Current.MainPage as MainPage; }
+        private MainPage RootPage { get => Application.Current.MainPage as MainPage; }
 
-        MenuViewModel _viewModel;
+        private MenuViewModel _viewModel;
 
         public MenuPage()
         {
@@ -46,9 +46,9 @@ namespace BankLedger.Core.Views
         {
             List<object> args = new List<object>();
 
-            if (item.TargetPageType == typeof(AccountPage))
+            if (item is AccountMenuItem acm)
             {
-                args.Add((Account)item.Data);
+                args.Add(acm.Account);
             }
 
             return (ContentPage)Activator.CreateInstance(item.TargetPageType, args.ToArray());

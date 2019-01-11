@@ -2,7 +2,50 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BankLedger.Core.Views.MenuPage"
+             xmlns:local="clr-namespace:BankLedger.Core"
              Title="Menu">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="AccountMenuItem">
+                <ViewCell>
+                    <Grid Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="80"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="{Binding Title}" 
+                                   Grid.Row="0" Grid.Column="0"
+                                   FontSize="20" />
+                        
+                        <Label Text="{Binding Balance, StringFormat={StaticResource Currency}}"
+                                   Grid.Row="0" Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   TextColor="{Binding Balance, Converter={StaticResource AmountConverter}}" />
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="NonAccountMenuItem">
+                <ViewCell>
+                    <Grid Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="{Binding Title}" 
+                                   Grid.Row="0" Grid.Column="0"
+                                   FontSize="20" />
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            
+            <local:MenuTemplateSelector x:Key="MenuTemplateSelector" 
+                                        AccountTemplate="{StaticResource AccountMenuItem}"
+                                        NonAccountTemplate="{StaticResource NonAccountMenuItem}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     
     <StackLayout VerticalOptions="FillAndExpand">
         <Image Source="notebook.png" 
@@ -25,29 +68,8 @@
                     ItemsSource="{Binding Items}"
                     RefreshCommand="{Binding LoadItemsCommand}"
                     ItemSelected="OnItemSelectedAsync"
-                    IsPullToRefreshEnabled="False">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Grid Padding="10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="80"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            
-                            <Label Text="{Binding Title}" 
-                                   Grid.Row="0" Grid.Column="0"
-                                   FontSize="20" />
-                            <Label Text="{Binding Balance, StringFormat={StaticResource Currency}}"
-                                   Grid.Row="0" Grid.Column="1"
-                                   HorizontalOptions="End"
-                                   IsVisible="{Binding IsForAccount}"
-                                   TextColor="{Binding Balance, Converter={StaticResource AmountConverter}}" />
-                        </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                    IsPullToRefreshEnabled="False"
+                    ItemTemplate="{StaticResource MenuTemplateSelector}"/>
         <Button 
             Text="+ Add Account"
             Clicked="OnAddAccountAsync"

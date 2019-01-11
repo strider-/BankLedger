@@ -13,6 +13,11 @@ namespace BankLedger.Core.Models
 
         public string Title { get; set; }
 
+        public Type TargetPageType { get; set; }
+    }
+
+    public class AccountMenuItem : HomeMenuItem
+    {
         private double _balance;
         public double Balance
         {
@@ -20,10 +25,6 @@ namespace BankLedger.Core.Models
             set { SetProperty(ref _balance, value); }
         }
 
-        public Type TargetPageType { get; set; }
-
-        public bool IsForAccount => Data != null && Data is Account;
-
-        public object Data { get; set; }
+        public Account Account { get; set; }
     }
 }

@@ -41,7 +41,7 @@ namespace BankLedger.Core.ViewModels
 
         private void AddNewMenuItem(object sender, Account account)
         {
-            var menuItem = ToHomeMenuItem(account);
+            var menuItem = ToAccountMenuItem(account);
 
             if (ContainsRecurringTransactionsItem())
             {
@@ -62,10 +62,11 @@ namespace BankLedger.Core.ViewModels
 
         private void Refresh(object sender, ModelAction<Transaction> obj)
         {
-            var menuItem = Items.SingleOrDefault(i => i.Id == obj.Item.AccountId);
+            var menuItem = Items.SingleOrDefault(i => i is AccountMenuItem && i.Id == obj.Item.AccountId) as AccountMenuItem;
+
             if (menuItem != null)
             {
-                var account = menuItem.Data as Account;
+                var account = menuItem.Account;
                 switch (obj.Action)
                 {
                     case ActionType.Add:
@@ -85,7 +86,7 @@ namespace BankLedger.Core.ViewModels
             var accounts = await Database.ExecuteAsync(Query);
             foreach (var account in accounts)
             {
-                var menuItem = ToHomeMenuItem(account);
+                var menuItem = ToAccountMenuItem(account);
                 Items.Add(menuItem);
             }
 
@@ -105,11 +106,11 @@ namespace BankLedger.Core.ViewModels
             }
         }
 
-        private HomeMenuItem ToHomeMenuItem(Account account)
+        private AccountMenuItem ToAccountMenuItem(Account account)
         {
-            return new HomeMenuItem
+            return new AccountMenuItem
             {
-                Data = account,
+                Account = account,
                 Id = account.Id,
                 TargetPageType = typeof(AccountPage),
                 Title = account.Name,
@@ -119,7 +120,7 @@ namespace BankLedger.Core.ViewModels
 
         private bool AtLeastOneAccount() => Items.Any(IsAccountItem);
 
-        private bool IsAccountItem(HomeMenuItem item) => item.TargetPageType == typeof(AccountPage);
+        private bool IsAccountItem(HomeMenuItem item) => item is AccountMenuItem;
 
         private bool ContainsRecurringTransactionsItem() => Items.Any(i => i.Id == (int)MenuItemType.RecurringTransactions);
     }

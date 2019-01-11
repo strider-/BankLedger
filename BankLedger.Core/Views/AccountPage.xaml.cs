@@ -9,7 +9,7 @@ namespace BankLedger.Core.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AccountPage : ContentPage
     {
-        AccountViewModel _viewModel;
+        private AccountViewModel _viewModel;
 
         public AccountPage(Account account)
         {
