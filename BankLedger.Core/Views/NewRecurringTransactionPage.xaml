@@ -33,7 +33,8 @@
             <Picker x:Name="AccountPicker"
                     ItemsSource="{Binding Accounts}"
                     SelectedItem="{Binding SelectedAccount, Mode=TwoWay}" 
-                    ItemDisplayBinding="{Binding Name}" />
+                    ItemDisplayBinding="{Binding Name}"
+                    Title="Select an Account" />
             
             <Label Text="Description" FontSize="Medium" />
             <Entry Text="{Binding Description}" FontSize="Small" Placeholder="Describe the transaction">

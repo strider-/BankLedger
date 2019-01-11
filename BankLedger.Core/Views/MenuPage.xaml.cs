@@ -32,7 +32,7 @@ namespace BankLedger.Core.Views
 
         private async void OnItemSelectedAsync(object sender, SelectedItemChangedEventArgs e)
         {
-            if (e.SelectedItem is HomeMenuItem item && item.TargetPageType != null)
+            if (e.SelectedItem is HomeMenuItem item)
             {
                 var page = item.CreateContentPage();
 

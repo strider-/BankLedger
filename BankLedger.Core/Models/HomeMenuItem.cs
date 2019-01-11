@@ -10,22 +10,31 @@ namespace BankLedger.Core.Models
 
     public class HomeMenuItem : NotifyPropertyChanged
     {
+        public HomeMenuItem(Type targetPageType)
+        {
+            TargetPageType = targetPageType ?? throw new ArgumentNullException(nameof(targetPageType));
+
+            if (!typeof(ContentPage).IsAssignableFrom(TargetPageType))
+            {
+                throw new ArgumentException(nameof(targetPageType), $"Needs to inherit from {nameof(ContentPage)}");
+            }
+        }
+
         public int Id { get; set; }
 
         public string Title { get; set; }
 
-        public Type TargetPageType { get; set; }
+        public Type TargetPageType { get; }
 
         public virtual ContentPage CreateContentPage() => CreatePageInstance();
 
-        protected ContentPage CreatePageInstance(params object[] args)
-        {
-            return (ContentPage)Activator.CreateInstance(TargetPageType, args);
-        }
+        protected ContentPage CreatePageInstance(params object[] args) => (ContentPage)Activator.CreateInstance(TargetPageType, args);
     }
 
     public class AccountMenuItem : HomeMenuItem
     {
+        public AccountMenuItem(Type targetPageType) : base(targetPageType) { }
+
         private double _balance;
         public double Balance
         {

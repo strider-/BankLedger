@@ -62,7 +62,9 @@ namespace BankLedger.Core.ViewModels
 
         private void Refresh(object sender, ModelAction<Transaction> obj)
         {
-            var menuItem = Items.SingleOrDefault(i => i is AccountMenuItem && i.Id == obj.Item.AccountId) as AccountMenuItem;
+            var menuItem = Items.Where(i => i is AccountMenuItem)
+                                .Cast<AccountMenuItem>()
+                                .SingleOrDefault(i => i.Id == obj.Item.AccountId);
 
             if (menuItem != null)
             {
@@ -97,22 +99,20 @@ namespace BankLedger.Core.ViewModels
         {
             if (AtLeastOneAccount() && !ContainsRecurringTransactionsItem())
             {
-                Items.Add(new HomeMenuItem
+                Items.Add(new HomeMenuItem(typeof(RecurringTransactionsPage))
                 {
                     Id = (int)MenuItemType.RecurringTransactions,
-                    Title = "Recurring Transactions",
-                    TargetPageType = typeof(RecurringTransactionsPage)
+                    Title = "Recurring Transactions"
                 });
             }
         }
 
         private AccountMenuItem ToAccountMenuItem(Account account)
         {
-            return new AccountMenuItem
+            return new AccountMenuItem(typeof(AccountPage))
             {
                 Account = account,
-                Id = account.Id,
-                TargetPageType = typeof(AccountPage),
+                Id = account.Id,                
                 Title = account.Name,
                 Balance = account.CurrentBalance
             };
