@@ -46,6 +46,8 @@ namespace BankLedger.Core.ViewModels
             {
                 Transactions.Insert(0, arg.Item);
             });
+
+            MessagingCenter.Subscribe<string, EmptyAction>(this, Messages.HardRefresh, (s, e) => LoadTransactionsCommand.Execute(null));
         }
 
         public async Task DeleteAsync(Transaction transaction)

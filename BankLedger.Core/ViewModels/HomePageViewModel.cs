@@ -29,6 +29,8 @@ namespace BankLedger.Core.ViewModels
             Title = "Bank Ledger";
             LoadAccountsCommand = new Command(async () => await LoadData(LoadAccountsAsync));
             Items.CollectionChanged += (s, e) => IsEmpty = !Items.Any();
+
+            MessagingCenter.Subscribe<string, EmptyAction>(this, Messages.HardRefresh, (s, e) => LoadAccountsCommand.Execute(null));
         }
 
         private async Task LoadAccountsAsync()

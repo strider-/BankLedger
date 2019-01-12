@@ -1,6 +1,5 @@
 ﻿using BankLedger.Core.Data;
 using BankLedger.Core.Models;
-using BankLedger.Core.Services;
 using BankLedger.Core.Views;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,7 +35,7 @@ namespace BankLedger.Core.ViewModels
             MessagingCenter.Subscribe<NewAccountViewModel, Account>(this, Messages.Add, AddNewMenuItem);
             MessagingCenter.Subscribe<NewTransactionViewModel, ModelAction<Transaction>>(this, Messages.Add, Refresh);
             MessagingCenter.Subscribe<AccountViewModel, ModelAction<Transaction>>(this, Messages.Delete, Refresh);
-            MessagingCenter.Subscribe<IDatabase, EmptyAction>(this, Messages.HardRefresh, HardRefresh);
+            MessagingCenter.Subscribe<string, EmptyAction>(this, Messages.HardRefresh, (s, e) => LoadItemsCommand.Execute(null));
         }
 
         private void AddNewMenuItem(object sender, Account account)
@@ -53,11 +52,6 @@ namespace BankLedger.Core.ViewModels
             }
 
             DetermineRecurringTransactionsItem();
-        }
-
-        private void HardRefresh(object sender, EmptyAction arg)
-        {
-            LoadItemsCommand.Execute(null);
         }
 
         private void Refresh(object sender, ModelAction<Transaction> obj)

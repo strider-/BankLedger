@@ -63,7 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
-    <Compile Include="RecurringTransactionsJob.cs" />
+    <Compile Include="Jobs\RecurringTransactionsJob.cs" />
+    <Compile Include="Jobs\RecurringTransactionsJobReceiver.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SplashActivity.cs" />

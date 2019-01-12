@@ -2,20 +2,18 @@
 using Android.App.Job;
 using Android.Content;
 using Android.OS;
-using BankLedger.Core;
 using BankLedger.Core.Data;
-using BankLedger.Core.Models;
 using BankLedger.Core.Services;
 using Java.Lang;
 using System.Linq;
-using Xamarin.Forms;
 
-namespace BankLedger.Droid
+namespace BankLedger.Droid.Jobs
 {
     [Service(Name = "BankLedger.Android.RecurringTransactionsJob", Permission = "android.permission.BIND_JOB_SERVICE")]
     public class RecurringTransactionsJob : JobService
     {
         public const int JobId = 0x42069;
+        public const string ActionKey = "CompletedRecurringTransactions";
 
         private WorkTask _task;
         private JobParameters _parameters;
@@ -53,10 +51,11 @@ namespace BankLedger.Droid
         {
             private readonly RecurringTransactionsJob _jobService;
 
-            private IDatabase Database => App.Database;
+            private IDatabase Database { get; }
 
             public WorkTask(RecurringTransactionsJob jobService)
             {
+                Database = new LedgerDatabase();
                 _jobService = jobService;
             }
 
@@ -73,7 +72,6 @@ namespace BankLedger.Droid
                         Database.ExecuteAsync(command).GetAwaiter().GetResult();
                     }
 
-                    MessagingCenter.Send(App.Database, Messages.HardRefresh, new EmptyAction());
                     return true;
                 }
                 catch (Exception e)
@@ -87,8 +85,15 @@ namespace BankLedger.Droid
             protected override void OnPostExecute(Object result)
             {
                 base.OnPostExecute(result);
+                var success = (bool)result;
 
-                _jobService.JobFinished(_jobService._parameters, !(bool)result);
+                if (success)
+                {
+                    var intent = new Intent(ActionKey);
+                    _jobService.BaseContext.SendBroadcast(intent);
+                }
+
+                _jobService.JobFinished(_jobService._parameters, !success);
             }
         }
     }
