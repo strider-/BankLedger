@@ -26,6 +26,7 @@
             <!--Converters-->
             <local:ZeroToEmptyConverter x:Key="ZeroToEmptyConverter" />
             <local:AmountConverter x:Key="AmountConverter" />
+            <local:TransactionColorConverter x:Key="TransactionColorConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

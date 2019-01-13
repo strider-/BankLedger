@@ -51,7 +51,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid Padding="5">
+                        <Grid Padding="5" BackgroundColor="{Binding ., Converter={StaticResource TransactionColorConverter}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="25"></RowDefinition>
                                 <RowDefinition Height="20"></RowDefinition>
