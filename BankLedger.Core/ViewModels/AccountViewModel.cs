@@ -1,6 +1,6 @@
-﻿using BankLedger.Core.Models;
+﻿using BankLedger.Core.Data;
+using BankLedger.Core.Models;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -9,11 +9,15 @@ namespace BankLedger.Core.ViewModels
 {
     public class AccountViewModel : BaseViewModel
     {
+        const int PageSize = 25;
+
         public Account Item { get; set; }
 
         public ObservableCollection<Transaction> Transactions { get; set; }
 
-        public Command LoadTransactionsCommand { get; set; }
+        public Command LoadFirstPageCommand { get; set; }
+
+        public Command LoadNextPageCommand { get; set; }
 
         public Command DeleteTransactionCommand { get; set; }
 
@@ -31,6 +35,8 @@ namespace BankLedger.Core.ViewModels
             set { SetProperty(ref _balance, value); }
         }
 
+        private int Offset { get; set; }
+
         public AccountViewModel(Account item = null)
         {
             Item = item;
@@ -38,39 +44,47 @@ namespace BankLedger.Core.ViewModels
             CurrentBalance = item.CurrentBalance;
 
             Transactions = new ObservableCollection<Transaction>();
-            Transactions.CollectionChanged += Refresh;
-            LoadTransactionsCommand = new Command(async () => await LoadData(LoadTransactionsAsync));
+            Transactions.CollectionChanged += (s, e) => IsEmpty = !Transactions.Any();
+            LoadFirstPageCommand = new Command(async () => await LoadData(LoadFirstPageAsync));
+            LoadNextPageCommand = new Command(async () => await LoadData(LoadNextPageAsync));
             DeleteTransactionCommand = new Command((obj) => ConfirmDeletion(obj));
 
             MessagingCenter.Subscribe<NewTransactionViewModel, ModelAction<Transaction>>(this, Messages.Add, (obj, arg) =>
             {
                 Transactions.Insert(0, arg.Item);
+                CurrentBalance += arg.Item.Amount;
             });
 
-            MessagingCenter.Subscribe<string, EmptyAction>(this, Messages.HardRefresh, (s, e) => LoadTransactionsCommand.Execute(null));
+            MessagingCenter.Subscribe<string, EmptyAction>(this, Messages.HardRefresh, (s, e) => LoadFirstPageCommand.Execute(null));
         }
 
         public async Task DeleteAsync(Transaction transaction)
         {
             await Database.DeleteAsync(transaction);
             Transactions.Remove(transaction);
+            CurrentBalance -= transaction.Amount;
             MessagingCenter.Send(this, Messages.Delete, new ModelAction<Transaction>(transaction, ActionType.Delete));
         }
 
-        private async Task LoadTransactionsAsync()
+        private async Task LoadFirstPageAsync()
         {
             Transactions.Clear();
-            var accountTransactions = await Database.GetAllAsync<Transaction>(t => t.AccountId == Item.Id);
-            foreach (var transaction in accountTransactions.OrderByDescending(t => t.Timestamp))
+            Offset = 0;
+
+            await LoadNextPageAsync();
+        }
+
+        private async Task LoadNextPageAsync()
+        {
+            var query = new PagedTransactionsQuery(Item.Id, Offset, PageSize);
+            var accountTransactions = await Database.ExecuteAsync(query);
+
+            foreach (var transaction in accountTransactions)
             {
                 Transactions.Add(transaction);
             }
-        }
 
-        private void Refresh(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            IsEmpty = !Transactions.Any();
-            CurrentBalance = Transactions.Aggregate(Item.InitialBalance, (b, t) => b += t.Amount);
+            Offset += PageSize;
         }
 
         private void ConfirmDeletion(object obj)
