@@ -1,4 +1,5 @@
-﻿using BankLedger.Core.Models;
+﻿using BankLedger.Core.Extensions;
+using BankLedger.Core.Models;
 using System;
 using System.Globalization;
 using Xamarin.Forms;
@@ -11,7 +12,7 @@ namespace BankLedger.Core.Converters
         {
             if(value is Transaction trans && trans.RecurringTransactionId.HasValue)
             {
-                return (Color)Application.Current.Resources["RecurringTransactionHighlight"];
+                return this.RecurringTransactionHighlight();
             }
 
             return Color.White;

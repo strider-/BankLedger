@@ -6,11 +6,16 @@
     
     <Application.Resources>
         <ResourceDictionary>
-            <!--Global Styles-->
+            <!--Colors-->
             <Color x:Key="NavigationPrimary">#741B47</Color>
             <Color x:Key="LightTextColor">#FFFFFF</Color>
             <Color x:Key="StickyColor">#EEEEEE</Color>
             <Color x:Key="RecurringTransactionHighlight">#F1E8EC</Color>
+            <Color x:Key="PositiveBalanceColor">Green</Color>
+            <Color x:Key="NegativeBalanceColor">Red</Color>
+            <Color x:Key="ZeroBalanceColor">Black</Color>
+            
+            <!--Styles-->
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
                 <Setter Property="BarTextColor" Value="{StaticResource LightTextColor}" />

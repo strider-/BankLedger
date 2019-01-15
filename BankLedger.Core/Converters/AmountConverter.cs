@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BankLedger.Core.Extensions;
+using System;
 using System.Globalization;
 using Xamarin.Forms;
 
@@ -12,14 +13,14 @@ namespace BankLedger.Core.Converters
 
             if (amount > 0)
             {
-                return Color.Green;
+                return this.PositiveBalanceColor();
             }
             else if (amount < 0)
             {
-                return Color.Red;
+                return this.NegativeBalanceColor();
             }
 
-            return Color.Black;
+            return this.ZeroBalanceColor();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
