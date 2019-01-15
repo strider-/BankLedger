@@ -11,7 +11,7 @@ namespace BankLedger.Core.Converters
         {
             if(value is Transaction trans && trans.RecurringTransactionId.HasValue)
             {
-                return Color.FromHex("#F1E8EC");
+                return (Color)Application.Current.Resources["RecurringTransactionHighlight"];
             }
 
             return Color.White;
