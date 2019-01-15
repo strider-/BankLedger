@@ -13,7 +13,10 @@ namespace BankLedger.Droid.Jobs
 
         public override void OnReceive(Context context, Intent intent)
         {
-            Activity?.HardRefresh();
+            if (intent.Action == RecurringTransactionsJob.ActionKey)
+            {
+                Activity?.HardRefresh();
+            }
         }
     }
 }

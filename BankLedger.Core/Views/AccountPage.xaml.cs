@@ -38,9 +38,8 @@ namespace BankLedger.Core.Views
 
         private void OnItemAppearingAsync(object sender, ItemVisibilityEventArgs e)
         {
-            var items = ItemsListView.ItemsSource as IList;
-
-            if (items != null && e.Item == items[items.Count - 1])
+            if (ItemsListView.ItemsSource is IList items &&
+                e.Item == items[items.Count - 1])
             {
                 _viewModel.LoadNextPageCommand.Execute(null);
             }

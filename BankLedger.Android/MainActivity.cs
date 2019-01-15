@@ -3,6 +3,7 @@ using Android.App.Job;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using Android.Widget;
 using BankLedger.Core;
 using BankLedger.Core.Models;
 using BankLedger.Droid.Jobs;
@@ -31,14 +32,17 @@ namespace BankLedger.Droid
 
         private void InitJobs(JobScheduler jobScheduler)
         {
-            var interval = (long)TimeSpan.FromDays(1).TotalMilliseconds;
+            if (jobScheduler.GetPendingJob(RecurringTransactionsJob.JobId) == null)
+            {
+                var interval = (long)TimeSpan.FromDays(1).TotalMilliseconds;
 
-            var job = RecurringTransactionsJob.Builder(this)
-                .SetPeriodic(interval)
-                .SetPersisted(true)
-                .Build();
+                var job = RecurringTransactionsJob.Builder(this)
+                    .SetPeriodic(interval)
+                    .SetPersisted(true)
+                    .Build();
 
-            jobScheduler.Schedule(job);
+                jobScheduler.Schedule(job);
+            }
         }
 
         protected override void OnResume()
@@ -52,9 +56,14 @@ namespace BankLedger.Droid
         protected override void OnPause()
         {
             UnregisterReceiver(_receiver);
-            base.OnPause();            
+            base.OnPause();
         }
 
-        public void HardRefresh() => MessagingCenter.Send(string.Empty, Messages.HardRefresh, new EmptyAction());
+        public void HardRefresh()
+        {
+            var toast = Toast.MakeText(this, "Daily recurring transactions complete.", ToastLength.Short);
+            RunOnUiThread(() => toast.Show());
+            MessagingCenter.Send(string.Empty, Messages.HardRefresh, new EmptyAction());
+        }
     }
 }
