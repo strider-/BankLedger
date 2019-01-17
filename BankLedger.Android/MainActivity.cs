@@ -59,11 +59,14 @@ namespace BankLedger.Droid
             base.OnPause();
         }
 
-        public void HardRefresh()
+        public void HardRefresh(int inserted)
         {
-            var toast = Toast.MakeText(this, "Daily recurring transactions complete.", ToastLength.Short);
-            RunOnUiThread(() => toast.Show());
-            MessagingCenter.Send(string.Empty, Messages.HardRefresh, new EmptyAction());
+            if (inserted > 0)
+            {
+                var toast = Toast.MakeText(this, $"{inserted} recurring transaction(s) processed.", ToastLength.Short);
+                RunOnUiThread(() => toast.Show());
+                MessagingCenter.Send(string.Empty, Messages.HardRefresh, new EmptyAction());
+            }
         }
     }
 }

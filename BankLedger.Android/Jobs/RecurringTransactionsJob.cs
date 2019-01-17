@@ -14,6 +14,7 @@ namespace BankLedger.Droid.Jobs
     {
         public const int JobId = 0x42069;
         public const string ActionKey = "CompletedRecurringTransactions";
+        public const string InsertedExtrasName = "Inserted";
 
         private WorkTask _task;
         private JobParameters _parameters;
@@ -61,6 +62,8 @@ namespace BankLedger.Droid.Jobs
 
             protected override Object DoInBackground(params Object[] @params)
             {
+                var result = new WorkResult { Inserted = 0, Completed = false };
+
                 try
                 {
                     var query = new PendingRecurringTransactionsQuery();
@@ -69,32 +72,41 @@ namespace BankLedger.Droid.Jobs
                     if (pendingTransactions.Any())
                     {
                         var command = new BatchInsertTransactionsCommand(pendingTransactions);
-                        Database.ExecuteAsync(command).GetAwaiter().GetResult();
+
+                        result.Inserted = Database.ExecuteAsync(command).GetAwaiter().GetResult();
                     }
 
-                    return true;
+                    result.Completed = true;
                 }
                 catch (Exception e)
                 {
                     System.Diagnostics.Debug.WriteLine($"Failed to run recurring transactions job: {e.Message}");
                 }
 
-                return false;
+                return result;
             }
 
-            protected override void OnPostExecute(Object result)
+            protected override void OnPostExecute(Object obj)
             {
-                base.OnPostExecute(result);
-                var success = (bool)result;
+                base.OnPostExecute(obj);
+                var result = (WorkResult)obj;
 
-                if (success)
+                if (result.Completed && result.Inserted > 0)
                 {
                     var intent = new Intent(ActionKey);
+                    intent.PutExtra(InsertedExtrasName, result.Inserted);
                     _jobService.BaseContext.SendBroadcast(intent);
                 }
 
-                _jobService.JobFinished(_jobService._parameters, !success);
+                _jobService.JobFinished(_jobService._parameters, !result.Completed);
             }
+        }
+
+        class WorkResult : Object
+        {
+            public int Inserted { get; set; }
+
+            public bool Completed { get; set; }
         }
     }
 }

@@ -15,7 +15,8 @@ namespace BankLedger.Droid.Jobs
         {
             if (intent.Action == RecurringTransactionsJob.ActionKey)
             {
-                Activity?.HardRefresh();
+                var inserted = intent.GetIntExtra(RecurringTransactionsJob.InsertedExtrasName, 0);
+                Activity?.HardRefresh(inserted);
             }
         }
     }
